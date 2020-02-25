@@ -2,6 +2,7 @@ import {Engine} from "./Engine";
 import {ResizeHelper} from "../utils/ResizeHelper";
 import {LoadScene} from "../scenes/LoadScene";
 import {GameScene} from "../scenes/GameScene";
+import {Config} from "../config/Config";
 
 /**
  * Application
@@ -9,18 +10,6 @@ import {GameScene} from "../scenes/GameScene";
  * @package core
  */
 export class Application {
-
-    /**
-     *  @access private
-     *  @var static width: number
-     */
-    public static width = 946;
-
-    /**
-     *  @access private
-     *  @var static height: number
-     */
-    public static height = 669;
 
     /**
      *  @access private
@@ -40,8 +29,8 @@ export class Application {
      */
     public static init(): void {
         window.addEventListener('resize', Application.resize );
-        this.engine = new Engine( this.width, this.height, "game" );
-        ResizeHelper.doResize( Application.engine, Application.width, Application.height );
+        this.engine = new Engine( Config.screenWidth, Config.screenHeight, "game" );
+        ResizeHelper.doResize( Application.engine, Config.screenWidth, Config.screenHeight );
 
         this.loadScene = new LoadScene();
         Application.engine.stage.addChild( this.loadScene );
@@ -69,7 +58,7 @@ export class Application {
 
     private static resize() {
         // Resize the renderer
-        ResizeHelper.doResize( Application.engine, Application.width, Application.height );
+        ResizeHelper.doResize( Application.engine, Config.screenWidth, Config.screenHeight );
     }
 
     private static render() {

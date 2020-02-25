@@ -1,5 +1,5 @@
 import PIXI = require("pixi.js");
-import {Application} from "../core/Application";
+import {Config} from "../config/Config";
 
 
 /**
@@ -37,8 +37,8 @@ export class LoadScene extends PIXI.Container implements IScene {
      */
     public setBg(): void {
         this.preloader   = PIXI.Sprite.fromImage( 'images/preloader.gif' );
-        this.preloader.x = Application.width / 2;
-        this.preloader.y = Application.height / 2;
+        this.preloader.x = Config.screenWidth / 2;
+        this.preloader.y = Config.screenHeight / 2;
         this.preloader.anchor.set( 0.5 );
     }
 

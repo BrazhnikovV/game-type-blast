@@ -11,8 +11,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var PIXI = require("pixi.js");
-var Application_1 = require("../core/Application");
 var Board_1 = require("../components/Board");
+var Config_1 = require("../config/Config");
 var GameScene = (function (_super) {
     __extends(GameScene, _super);
     function GameScene() {
@@ -26,15 +26,11 @@ var GameScene = (function (_super) {
     GameScene.prototype.setBg = function () {
         this.bg = PIXI.Sprite.fromImage('images/bg.png');
         this.bg.interactive = true;
-        this.bg.width = Application_1.Application.width;
-        this.bg.height = Application_1.Application.height;
     };
     GameScene.prototype.setBoard = function () {
         this.board = new Board_1.Board();
-        this.board.x = 35;
-        this.board.y = 115;
-        this.board.width = 442;
-        this.board.height = 495;
+        this.board.x = Config_1.Config.boardX;
+        this.board.y = Config_1.Config.boardY;
     };
     return GameScene;
 }(PIXI.Container));

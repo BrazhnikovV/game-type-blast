@@ -4,13 +4,14 @@ var Engine_1 = require("./Engine");
 var ResizeHelper_1 = require("../utils/ResizeHelper");
 var LoadScene_1 = require("../scenes/LoadScene");
 var GameScene_1 = require("../scenes/GameScene");
+var Config_1 = require("../config/Config");
 var Application = (function () {
     function Application() {
     }
     Application.init = function () {
         window.addEventListener('resize', Application.resize);
-        this.engine = new Engine_1.Engine(this.width, this.height, "game");
-        ResizeHelper_1.ResizeHelper.doResize(Application.engine, Application.width, Application.height);
+        this.engine = new Engine_1.Engine(Config_1.Config.screenWidth, Config_1.Config.screenHeight, "game");
+        ResizeHelper_1.ResizeHelper.doResize(Application.engine, Config_1.Config.screenWidth, Config_1.Config.screenHeight);
         this.loadScene = new LoadScene_1.LoadScene();
         Application.engine.stage.addChild(this.loadScene);
         Application.render();
@@ -35,7 +36,7 @@ var Application = (function () {
         });
     };
     Application.resize = function () {
-        ResizeHelper_1.ResizeHelper.doResize(Application.engine, Application.width, Application.height);
+        ResizeHelper_1.ResizeHelper.doResize(Application.engine, Config_1.Config.screenWidth, Config_1.Config.screenHeight);
     };
     Application.render = function () {
         requestAnimationFrame(Application.render);
@@ -45,8 +46,6 @@ var Application = (function () {
         Application.engine.stage.removeChild(this.loadScene);
         Application.engine.stage.addChild(new GameScene_1.GameScene());
     };
-    Application.width = 946;
-    Application.height = 669;
     return Application;
 }());
 exports.Application = Application;

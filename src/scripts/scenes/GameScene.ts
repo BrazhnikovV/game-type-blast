@@ -1,6 +1,6 @@
 import PIXI = require("pixi.js");
-import {Application} from "../core/Application";
 import {Board} from "../components/Board";
+import {Config} from "../config/Config";
 
 export class GameScene extends PIXI.Container implements IScene {
 
@@ -41,8 +41,6 @@ export class GameScene extends PIXI.Container implements IScene {
     public setBg(): void {
         this.bg = PIXI.Sprite.fromImage('images/bg.png');
         this.bg.interactive = true;
-        this.bg.width = Application.width;
-        this.bg.height = Application.height;
     }
 
     /**
@@ -51,9 +49,7 @@ export class GameScene extends PIXI.Container implements IScene {
      */
     public setBoard(): void {
         this.board = new Board();
-        this.board.x = 35;
-        this.board.y = 115;
-        this.board.width  = 442;
-        this.board.height = 495;
+        this.board.x = Config.boardX;
+        this.board.y = Config.boardY;
     }
 }

@@ -11,7 +11,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var PIXI = require("pixi.js");
-var Application_1 = require("../core/Application");
+var Config_1 = require("../config/Config");
 var LoadScene = (function (_super) {
     __extends(LoadScene, _super);
     function LoadScene() {
@@ -23,8 +23,8 @@ var LoadScene = (function (_super) {
     }
     LoadScene.prototype.setBg = function () {
         this.preloader = PIXI.Sprite.fromImage('images/preloader.gif');
-        this.preloader.x = Application_1.Application.width / 2;
-        this.preloader.y = Application_1.Application.height / 2;
+        this.preloader.x = Config_1.Config.screenWidth / 2;
+        this.preloader.y = Config_1.Config.screenHeight / 2;
         this.preloader.anchor.set(0.5);
     };
     LoadScene.prototype.setTicker = function () {

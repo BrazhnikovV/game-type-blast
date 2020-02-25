@@ -39,7 +39,9 @@
     "vinyl-source-stream": "^1.1.0",
     "yargs": "^8.0.2"
   },
-  "dependencies": {},
+  "dependencies": {
+    "in_array": "^1.1.0"
+  },
   "settings": {
     "debug": true,
     "tsconfig": {
