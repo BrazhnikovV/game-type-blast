@@ -1,5 +1,6 @@
 import PIXI = require("pixi.js");
 import in_array = require('in_array');
+import {Config} from "../config/Config";
 
 /**
  * RecursiveSearchHelper
@@ -20,7 +21,7 @@ export class RecursiveSearchHelper {
     public static findNeighboringTiles( coll: number, row: number, matchTiles: PIXI.Container[] = [], tiles: PIXI.Container[] ): PIXI.Container[] {
 
         if ( matchTiles.length === 0 ) {
-            matchTiles.push( tiles[coll][row] );
+             matchTiles.push( tiles[this.getIndex( coll, row, tiles )] );
         }
 
         let matchColls       = this.findMatchingTilesByCollRow( coll, row, tiles );
@@ -51,10 +52,55 @@ export class RecursiveSearchHelper {
      * @return PIXI.Container[]
      */
     private static findMatchingTilesByCollRow( c: number, r: number, tiles: PIXI.Container[] ): PIXI.Container[] {
-        let arr: PIXI.Container[] = [];
-        arr.push( tiles[c][r-1], tiles[c][r+1], tiles[c-1][r], tiles[c+1][r] );
+
+        let index = this.getIndex( c, r, tiles );
+        let arr   = this.getNonDiagonalMatches( index, c, tiles )
         return arr.filter(
-            tile => tile.getColor() === tiles[c][r].getColor()
+            tile => tile.getColor() === tiles[index].getColor()
         );
+    }
+
+    /**
+     * getIndex -
+     * @param c - номер колонки
+     * @param r - номер строки
+     * @param tiles - весь набор тайло на доске
+     */
+    private static getIndex( c: number, r: number, tiles: PIXI.Container[] ): number {
+
+        let index = 0;
+        tiles.map( ( tile, tIndex) => {
+            if ( tile.getColl() === c && tile.getRow() === r ) {
+                index = tIndex;
+            }
+            return tile;
+        });
+
+        return index;
+    }
+
+    /**
+     * getNonDiagonalMatches -
+     * @param index -
+     * @param c - номер колонки
+     * @param tiles - весь набор тайло на доске
+     */
+    private static getNonDiagonalMatches( index: number, c: number, tiles: PIXI.Container[] ): PIXI.Container[] {
+
+        let arr: PIXI.Container[] = [];
+
+        if ( tiles.hasOwnProperty( index + Config.cols ) )
+            arr.push( tiles[index + Config.cols] );
+
+        if ( tiles.hasOwnProperty( index - Config.cols ) )
+            arr.push( tiles[index - Config.cols] );
+
+        if ( tiles.hasOwnProperty( index - 1 ) && c !== 0 )
+            arr.push( tiles[index - 1] );
+
+        if ( tiles.hasOwnProperty( index + 1 ) && c !== Config.cols - 1 )
+            arr.push( tiles[index + 1] );
+
+        return arr;
     }
 }

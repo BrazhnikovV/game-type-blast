@@ -1,3 +1,4 @@
+import PIXI = require("pixi.js");
 import {Engine} from "./Engine";
 import {ResizeHelper} from "../utils/ResizeHelper";
 import {LoadScene} from "../scenes/LoadScene";
@@ -10,6 +11,12 @@ import {Config} from "../config/Config";
  * @package core
  */
 export class Application {
+
+    /**
+     *  @access private
+     *  @var ee: PIXI.utils.EventEmitter
+     */
+    public static ee: PIXI.utils.EventEmitter;
 
     /**
      *  @access private
@@ -28,6 +35,7 @@ export class Application {
      * @return void
      */
     public static init(): void {
+        this.ee = new PIXI.utils.EventEmitter();
         window.addEventListener('resize', Application.resize );
         this.engine = new Engine( Config.screenWidth, Config.screenHeight, "game" );
         ResizeHelper.doResize( Application.engine, Config.screenWidth, Config.screenHeight );

@@ -1,5 +1,6 @@
 import PIXI = require("pixi.js");
 import {RandomHelper} from "../utils/RandomHelper";
+import {Application} from "../core/Application";
 
 /**
  * Tile
@@ -61,6 +62,10 @@ export class Tile extends PIXI.Container {
         this.bg = PIXI.Sprite.fromImage( 'images/tiles/' + this.color + '.png' );
         this.bg.width  = 160;
         this.bg.height = 160;
+
+        this.bg.interactive = true;
+        this.bg.buttonMode  = true;
+        this.bg.on('pointerdown', this.clickListener );
         super.addChild( this.bg );
     }
 
@@ -137,5 +142,13 @@ export class Tile extends PIXI.Container {
      */
     public getHeight(): number {
         return this.bg.height;
+    }
+
+    /**
+     * clickListener -
+     * @return void
+     */
+    private clickListener(): void {
+        Application.ee.emit('onClickTile', { 'tile' : this['parent'] } );
     }
 }

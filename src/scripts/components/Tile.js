@@ -12,6 +12,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var PIXI = require("pixi.js");
 var RandomHelper_1 = require("../utils/RandomHelper");
+var Application_1 = require("../core/Application");
 var Tile = (function (_super) {
     __extends(Tile, _super);
     function Tile() {
@@ -29,6 +30,9 @@ var Tile = (function (_super) {
         this.bg = PIXI.Sprite.fromImage('images/tiles/' + this.color + '.png');
         this.bg.width = 160;
         this.bg.height = 160;
+        this.bg.interactive = true;
+        this.bg.buttonMode = true;
+        this.bg.on('pointerdown', this.clickListener);
         _super.prototype.addChild.call(this, this.bg);
     };
     Tile.prototype.setRow = function (num) {
@@ -57,6 +61,9 @@ var Tile = (function (_super) {
     };
     Tile.prototype.getHeight = function () {
         return this.bg.height;
+    };
+    Tile.prototype.clickListener = function () {
+        Application_1.Application.ee.emit('onClickTile', { 'tile': this['parent'] });
     };
     return Tile;
 }(PIXI.Container));

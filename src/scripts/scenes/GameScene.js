@@ -29,6 +29,7 @@ var GameScene = (function (_super) {
     };
     GameScene.prototype.setBoard = function () {
         this.board = new Board_1.Board();
+        this.board.init();
         this.board.x = Config_1.Config.boardX;
         this.board.y = Config_1.Config.boardY;
     };

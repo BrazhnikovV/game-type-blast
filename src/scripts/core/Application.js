@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var PIXI = require("pixi.js");
 var Engine_1 = require("./Engine");
 var ResizeHelper_1 = require("../utils/ResizeHelper");
 var LoadScene_1 = require("../scenes/LoadScene");
@@ -9,6 +10,7 @@ var Application = (function () {
     function Application() {
     }
     Application.init = function () {
+        this.ee = new PIXI.utils.EventEmitter();
         window.addEventListener('resize', Application.resize);
         this.engine = new Engine_1.Engine(Config_1.Config.screenWidth, Config_1.Config.screenHeight, "game");
         ResizeHelper_1.ResizeHelper.doResize(Application.engine, Config_1.Config.screenWidth, Config_1.Config.screenHeight);

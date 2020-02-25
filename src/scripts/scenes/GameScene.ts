@@ -49,6 +49,7 @@ export class GameScene extends PIXI.Container implements IScene {
      */
     public setBoard(): void {
         this.board = new Board();
+        this.board.init();
         this.board.x = Config.boardX;
         this.board.y = Config.boardY;
     }
