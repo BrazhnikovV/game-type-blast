@@ -44,6 +44,25 @@ export class RecursiveSearchHelper {
     }
 
     /**
+     * getIndex -
+     * @param c - номер колонки
+     * @param r - номер строки
+     * @param tiles - весь набор тайло на доске
+     */
+    public static getIndex( c: number, r: number, tiles: PIXI.Container[] ): number {
+
+        let index = 0;
+        tiles.map( ( tile, tIndex) => {
+            if ( tile.getColl() === c && tile.getRow() === r ) {
+                index = tIndex;
+            }
+            return tile;
+        });
+
+        return index;
+    }
+
+    /**
      * findMatchingTilesByCollRow - найти прилегающие тайлы одного цвета
      * по номеру колонки и строки проверяемого тайла
      * @param c - номер колонки
@@ -58,25 +77,6 @@ export class RecursiveSearchHelper {
         return arr.filter(
             tile => tile.getColor() === tiles[index].getColor()
         );
-    }
-
-    /**
-     * getIndex -
-     * @param c - номер колонки
-     * @param r - номер строки
-     * @param tiles - весь набор тайло на доске
-     */
-    private static getIndex( c: number, r: number, tiles: PIXI.Container[] ): number {
-
-        let index = 0;
-        tiles.map( ( tile, tIndex) => {
-            if ( tile.getColl() === c && tile.getRow() === r ) {
-                index = tIndex;
-            }
-            return tile;
-        });
-
-        return index;
     }
 
     /**

@@ -11,15 +11,14 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var PIXI = require("pixi.js");
-var TilesFactory_1 = require("./factories/TilesFactory");
 var Application_1 = require("../core/Application");
 var RecursiveSearchHelper_1 = require("../utils/RecursiveSearchHelper");
+var TilesContainer_1 = require("./TilesContainer");
 var Board = (function (_super) {
     __extends(Board, _super);
     function Board() {
         var _this = _super.call(this) || this;
-        _this.tiles = [];
-        _this.tilesFactory = new TilesFactory_1.TilesFactory();
+        _this.tiles = new TilesContainer_1.TilesContainer();
         return _this;
     }
     Board.prototype.init = function () {
@@ -27,8 +26,10 @@ var Board = (function (_super) {
         this.setBg();
         this.setTiles();
         Application_1.Application.ee.on('onClickTile', function (data) {
-            console.log(RecursiveSearchHelper_1.RecursiveSearchHelper.findNeighboringTiles(data.tile.getColl(), data.tile.getRow(), [], _this.tiles));
-            _this.resetVisitedTiles();
+            var matchTiles = RecursiveSearchHelper_1.RecursiveSearchHelper.findNeighboringTiles(data.tile.getColl(), data.tile.getRow(), [], _this.tiles.getChildrens());
+            _this.tiles.clearMatchTiles(matchTiles);
+            _this.tiles.resetVisitedTiles();
+            _this.tiles.addTiles(matchTiles);
         });
     };
     Board.prototype.setBg = function () {
@@ -36,17 +37,7 @@ var Board = (function (_super) {
         _super.prototype.addChild.call(this, this.bg);
     };
     Board.prototype.setTiles = function () {
-        var _this = this;
-        this.tiles = this.tilesFactory.create().map(function (tile) {
-            _super.prototype.addChild.call(_this, tile);
-            return tile;
-        });
-    };
-    Board.prototype.resetVisitedTiles = function () {
-        this.tiles = this.tiles.filter(function (fTile) { return fTile.getVisited; }).map(function (mTile) {
-            mTile.setVisited();
-            return mTile;
-        });
+        _super.prototype.addChild.call(this, this.tiles);
     };
     return Board;
 }(PIXI.Container));

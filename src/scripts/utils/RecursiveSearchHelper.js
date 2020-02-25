@@ -28,11 +28,6 @@ var RecursiveSearchHelper = (function () {
             return concatMatchTiles;
         }
     };
-    RecursiveSearchHelper.findMatchingTilesByCollRow = function (c, r, tiles) {
-        var index = this.getIndex(c, r, tiles);
-        var arr = this.getNonDiagonalMatches(index, c, tiles);
-        return arr.filter(function (tile) { return tile.getColor() === tiles[index].getColor(); });
-    };
     RecursiveSearchHelper.getIndex = function (c, r, tiles) {
         var index = 0;
         tiles.map(function (tile, tIndex) {
@@ -42,6 +37,11 @@ var RecursiveSearchHelper = (function () {
             return tile;
         });
         return index;
+    };
+    RecursiveSearchHelper.findMatchingTilesByCollRow = function (c, r, tiles) {
+        var index = this.getIndex(c, r, tiles);
+        var arr = this.getNonDiagonalMatches(index, c, tiles);
+        return arr.filter(function (tile) { return tile.getColor() === tiles[index].getColor(); });
     };
     RecursiveSearchHelper.getNonDiagonalMatches = function (index, c, tiles) {
         var arr = [];

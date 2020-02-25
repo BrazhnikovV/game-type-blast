@@ -1,7 +1,7 @@
 import PIXI = require("pixi.js");
-import {TilesFactory} from "./factories/TilesFactory";
 import {Application} from "../core/Application";
 import {RecursiveSearchHelper} from "../utils/RecursiveSearchHelper";
+import {TilesContainer} from "./TilesContainer";
 
 /**
  * Board
@@ -18,15 +18,9 @@ export class Board extends PIXI.Container {
 
     /**
      *  @access private
-     *  @var preloader: PIXI.Sprite
+     *  @var tiles: TilesContainer
      */
-    private tiles: PIXI.Container[] = [];
-
-    /**
-     *  @access private
-     *  @var tilesFactory: TilesFactory
-     */
-    private tilesFactory: TilesFactory = new TilesFactory();
+    private tiles: TilesContainer = new TilesContainer();
 
     /**
      * constructor - конструктор
@@ -39,12 +33,12 @@ export class Board extends PIXI.Container {
         this.setBg();
         this.setTiles();
         Application.ee.on('onClickTile', ( data ) => {
-            console.log(
-                RecursiveSearchHelper.findNeighboringTiles(
-                    data.tile.getColl(), data.tile.getRow(), [], this.tiles
-                )
+            let matchTiles = RecursiveSearchHelper.findNeighboringTiles(
+                data.tile.getColl(), data.tile.getRow(), [], this.tiles.getChildrens()
             );
-            this.resetVisitedTiles();
+            this.tiles.clearMatchTiles( matchTiles );
+            this.tiles.resetVisitedTiles();
+            this.tiles.addTiles( matchTiles );
         });
     }
 
@@ -58,20 +52,10 @@ export class Board extends PIXI.Container {
     }
 
     /**
-     * setTiles
+     * setTiles - установить тайлы
      * @return void
      */
     private setTiles(): void {
-        this.tiles = this.tilesFactory.create().map( tile => {
-            super.addChild( tile );
-            return tile;
-        });
-    }
-
-    private resetVisitedTiles(): void {
-        this.tiles = this.tiles.filter( fTile => fTile.getVisited ).map( (mTile) => {
-           mTile.setVisited();
-           return mTile;
-        });
+        super.addChild( this.tiles );
     }
 }

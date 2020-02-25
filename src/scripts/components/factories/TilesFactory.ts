@@ -10,32 +10,67 @@ import {Config} from "../../config/Config";
  */
 export class TilesFactory extends FactoryMethod {
 
-    protected createComponent() {
-        this.setTiles();
-        return this.tiles;
+    /**
+     * createComponent -
+     * @param type - тип создаваемого набора тайлов
+     * @return PIXI.Container[]
+     */
+    protected createComponent( tiles: PIXI.Container[] ): PIXI.Container[] {
+        switch( tiles ) {
+            case undefined:
+                return this.initTiles();
+            break;
+            default:
+                return this.addTiles( tiles );
+            break;
+        }
+        return [];
     }
 
     /**
-     *  @access private
-     *  @var preloader: PIXI.Sprite
+     * initTiles - перебирает колонки и запускает функцию установки значений для тайлов
+     * @return PIXI.Container[]
      */
-    private tiles: PIXI.Container[] = [];
-
-    /**
-     * setTiles - перебирает колонки и запускает функцию установки значений для тайлов
-     * @return void
-     */
-    private setTiles(): void {
+    private initTiles():  PIXI.Container[] {
         let coll, row = 0;
+        let tiles: PIXI.Container[] = []
         for ( let i = 0; i < ( Config.cols * Config.rows ); ++i ) {
 
             if ( i !== 0 && ( i % Config.cols ) === 0 ) row++;
             coll = i % Config.cols;
 
-            this.tiles.push( new Tile() );
-            this.setTileCollRow( this.tiles[i], coll, row );
-            this.setTilePosition( this.tiles[i], coll, row );
+            tiles.push( new Tile() );
+            this.setParameters( tiles[i], coll, row );;
         }
+
+        return tiles;
+    }
+
+    /**
+     * addTiles - добавляет необходимые тайлы
+     * @return void
+     */
+    private addTiles( matchTiles: PIXI.Container[] ): PIXI.Container[] {
+
+        let tiles: PIXI.Container[] = [];
+        matchTiles.map( ( tile, index ) => {
+            tiles.push( new Tile() );
+            this.setParameters( tiles[index], tile.getColl(), tile.getRow() );
+        });
+
+        return tiles;
+    }
+
+    /**
+     * setParameters - установить необходимые параметры тайла
+     * @param tile - объекта тайла
+     * @param coll - номер колонки
+     * @param row - номер строки
+     * @return void
+     */
+    private setParameters( tile: Tile, coll: number, row: number ): void {
+        this.setTileCollRow( tile, coll, row );
+        this.setTilePosition( tile, coll, row );
     }
 
     /**
