@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var PIXI = require("pixi.js");
+var TWEEN = require("@tweenjs/tween.js");
 var Engine_1 = require("./Engine");
 var ResizeHelper_1 = require("../utils/ResizeHelper");
 var LoadScene_1 = require("../scenes/LoadScene");
@@ -23,10 +24,6 @@ var Application = (function () {
         var _this = this;
         Application.engine.loader
             .add("images/bg.png")
-            .add("images/bg1.png")
-            .add("images/bg2.png")
-            .add("images/bg3.png")
-            .add("images/bg4.png")
             .add("images/board.png")
             .add("images/tiles/blue.png")
             .add("images/tiles/green.png")
@@ -43,6 +40,7 @@ var Application = (function () {
     Application.render = function () {
         requestAnimationFrame(Application.render);
         Application.engine.renderer.render(Application.engine.stage);
+        TWEEN.update();
     };
     Application.onLoadResources = function () {
         Application.engine.stage.removeChild(this.loadScene);

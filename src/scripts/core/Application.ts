@@ -1,4 +1,5 @@
-import PIXI = require("pixi.js");
+import PIXI = require('pixi.js');
+import TWEEN = require('@tweenjs/tween.js');
 import {Engine} from "./Engine";
 import {ResizeHelper} from "../utils/ResizeHelper";
 import {LoadScene} from "../scenes/LoadScene";
@@ -13,7 +14,7 @@ import {Config} from "../config/Config";
 export class Application {
 
     /**
-     *  @access private
+     *  @access public
      *  @var ee: PIXI.utils.EventEmitter
      */
     public static ee: PIXI.utils.EventEmitter;
@@ -35,7 +36,9 @@ export class Application {
      * @return void
      */
     public static init(): void {
+
         this.ee = new PIXI.utils.EventEmitter();
+
         window.addEventListener('resize', Application.resize );
         this.engine = new Engine( Config.screenWidth, Config.screenHeight, "game" );
         ResizeHelper.doResize( Application.engine, Config.screenWidth, Config.screenHeight );
@@ -46,13 +49,14 @@ export class Application {
         this.load();
     }
 
-    private static load() {
+    /**
+     * load
+     * @return void
+     */
+    private static load(): void {
+
         Application.engine.loader
             .add( "images/bg.png" )
-            .add( "images/bg1.png" )
-            .add( "images/bg2.png" )
-            .add( "images/bg3.png" )
-            .add( "images/bg4.png" )
             .add( "images/board.png" )
             .add( "images/tiles/blue.png" )
             .add( "images/tiles/green.png" )
@@ -64,17 +68,29 @@ export class Application {
             });
     }
 
-    private static resize() {
-        // Resize the renderer
+    /**
+     * resize
+     * @return void
+     */
+    private static resize(): void {
         ResizeHelper.doResize( Application.engine, Config.screenWidth, Config.screenHeight );
     }
 
-    private static render() {
+    /**
+     * render
+     * @return void
+     */
+    private static render(): void {
         requestAnimationFrame( Application.render );
         Application.engine.renderer.render( Application.engine.stage );
+        TWEEN.update();
     }
 
-    private static onLoadResources() {
+    /**
+     * onLoadResources
+     * @return void
+     */
+    private static onLoadResources(): void {
         Application.engine.stage.removeChild( this.loadScene );
         Application.engine.stage.addChild( new GameScene() );
     }

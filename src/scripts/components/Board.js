@@ -11,9 +11,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var PIXI = require("pixi.js");
+var TWEEN = require("@tweenjs/tween.js");
 var Application_1 = require("../core/Application");
 var RecursiveSearchHelper_1 = require("../utils/RecursiveSearchHelper");
 var TilesContainer_1 = require("./TilesContainer");
+var Config_1 = require("../config/Config");
 var Board = (function (_super) {
     __extends(Board, _super);
     function Board() {
@@ -26,9 +28,7 @@ var Board = (function (_super) {
         this.setBg();
         this.setTiles();
         Application_1.Application.ee.on('onClickTile', function (data) {
-            var matchTiles = RecursiveSearchHelper_1.RecursiveSearchHelper.findNeighboringTiles(data.tile.getColl(), data.tile.getRow(), [], _this.tiles.getChildrens());
-            _this.tiles.clearMatchTiles(matchTiles);
-            _this.tiles.resetVisitedTiles();
+            _this.handleClickOnTiles(data);
         });
     };
     Board.prototype.setBg = function () {
@@ -37,6 +37,27 @@ var Board = (function (_super) {
     };
     Board.prototype.setTiles = function () {
         _super.prototype.addChild.call(this, this.tiles);
+    };
+    Board.prototype.handleClickOnTiles = function (data) {
+        var matchTiles = RecursiveSearchHelper_1.RecursiveSearchHelper.findNeighboringTiles(data.tile.getColl(), data.tile.getRow(), [], this.tiles.getChildrens());
+        this.tiles.clearMatchTiles(matchTiles);
+        this.tiles.resetVisitedTiles();
+        var movedTiles = RecursiveSearchHelper_1.RecursiveSearchHelper.getTilesToBeMoved(matchTiles, this.tiles.getChildrens());
+        var movedTilesWithDistance = RecursiveSearchHelper_1.RecursiveSearchHelper.getMovementDistance(movedTiles, matchTiles);
+        this.moveTilesToFreePlaces(movedTilesWithDistance);
+    };
+    Board.prototype.moveTilesToFreePlaces = function (movedDistance) {
+        movedDistance.map(function (tile) {
+            var cntTlsMove = tile.rows;
+            var toY = (tile.mvdTile.y + (tile.mvdTile.height * cntTlsMove) + (Config_1.Config.tileOffsetY * cntTlsMove));
+            tile.mvdTile.setRow(tile.mvdTile.getRow() + cntTlsMove);
+            new TWEEN.Tween(tile.mvdTile)
+                .to({ y: toY }, 500)
+                .easing(TWEEN.Easing.Quadratic.Out)
+                .onComplete(function () {
+            })
+                .start();
+        });
     };
     return Board;
 }(PIXI.Container));

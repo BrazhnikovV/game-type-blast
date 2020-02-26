@@ -37,10 +37,16 @@ var RecursiveSearchHelper = (function () {
         });
         return index;
     };
-    RecursiveSearchHelper.findMatchingTilesByCollRow = function (c, r, tiles) {
-        var index = this.getIndex(c, r, tiles);
-        var arr = this.getNonDiagonalMatches(c, r, tiles);
-        return arr.filter(function (tile) { return tile.getColor() === tiles[index].getColor(); });
+    RecursiveSearchHelper.getTilesToBeMoved = function (matchTiles, tiles) {
+        var arr = [];
+        matchTiles.map(function (mTile) {
+            arr.push.apply(arr, tiles.filter(function (fTile) { return fTile.getRow() < mTile.getRow()
+                && fTile.getColl() === mTile.getColl(); }));
+        });
+        return this.getDistinctTiles(arr);
+    };
+    RecursiveSearchHelper.getMovementDistance = function (movedTiles, matchTiles) {
+        return this.getCountTilesMove(movedTiles, matchTiles);
     };
     RecursiveSearchHelper.getNonDiagonalMatches = function (c, r, tiles) {
         var arr = [];
@@ -49,6 +55,32 @@ var RecursiveSearchHelper = (function () {
         arr.push.apply(arr, tiles.filter((function (fTile) { return fTile.getColl() === c + 1 && fTile.getRow() === r; })));
         arr.push.apply(arr, tiles.filter((function (fTile) { return fTile.getColl() === c - 1 && fTile.getRow() === r; })));
         return arr;
+    };
+    RecursiveSearchHelper.findMatchingTilesByCollRow = function (c, r, tiles) {
+        var index = this.getIndex(c, r, tiles);
+        var arr = this.getNonDiagonalMatches(c, r, tiles);
+        return arr.filter(function (tile) { return tile.getColor() === tiles[index].getColor(); });
+    };
+    RecursiveSearchHelper.getDistinctTiles = function (moveTiles) {
+        var uniqueArray = moveTiles.filter(function (elem, pos) {
+            return moveTiles.indexOf(elem) == pos;
+        });
+        return uniqueArray;
+    };
+    RecursiveSearchHelper.getCountTilesMove = function (movedTiles, matchTiles) {
+        var _this = this;
+        var arr = [];
+        movedTiles.map(function (mvdTile) {
+            arr.push({
+                'mvdTile': mvdTile,
+                'rows': _this.getCountMatchTiles(matchTiles, mvdTile)
+            });
+        });
+        return arr;
+    };
+    RecursiveSearchHelper.getCountMatchTiles = function (matchTiles, mvdTile) {
+        return matchTiles.filter(function (mchTile) { return mchTile.getColl() === mvdTile.getColl()
+            && mvdTile.getRow() < mchTile.getRow(); }).length;
     };
     return RecursiveSearchHelper;
 }());

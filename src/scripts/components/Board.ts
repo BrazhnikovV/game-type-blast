@@ -1,7 +1,9 @@
 import PIXI = require("pixi.js");
+import TWEEN = require('@tweenjs/tween.js');
 import {Application} from "../core/Application";
 import {RecursiveSearchHelper} from "../utils/RecursiveSearchHelper";
 import {TilesContainer} from "./TilesContainer";
+import {Config} from "../config/Config";
 
 /**
  * Board
@@ -33,12 +35,7 @@ export class Board extends PIXI.Container {
         this.setBg();
         this.setTiles();
         Application.ee.on('onClickTile', ( data ) => {
-            let matchTiles = RecursiveSearchHelper.findNeighboringTiles(
-                data.tile.getColl(), data.tile.getRow(), [], this.tiles.getChildrens()
-            );
-            this.tiles.clearMatchTiles( matchTiles );
-            this.tiles.resetVisitedTiles();
-            //this.tiles.addTiles( matchTiles );
+            this.handleClickOnTiles( data );
         });
     }
 
@@ -57,5 +54,47 @@ export class Board extends PIXI.Container {
      */
     private setTiles(): void {
         super.addChild( this.tiles );
+    }
+
+    /**
+     * handleClickOnTiles - обрабатываем событие клика по тайлу
+     * @param data - данные переданные от тайла
+     * @return void
+     */
+    private handleClickOnTiles( data ): void {
+
+        let matchTiles = RecursiveSearchHelper.findNeighboringTiles(
+            data.tile.getColl(), data.tile.getRow(), [], this.tiles.getChildrens()
+        );
+        this.tiles.clearMatchTiles( matchTiles );
+        this.tiles.resetVisitedTiles();
+
+        let movedTiles = RecursiveSearchHelper.getTilesToBeMoved( matchTiles, this.tiles.getChildrens() );
+        let movedTilesWithDistance = RecursiveSearchHelper.getMovementDistance( movedTiles, matchTiles );
+
+        this.moveTilesToFreePlaces( movedTilesWithDistance );
+    }
+
+    /**
+     * moveTilesToFreePlaces - переместить оставшиеся тайлы после
+     * уничтожения группы совпавших на освободившиеся места
+     * @param moveTiles - набор тайлов, которые необходимо переместить
+     * @param matchTiles - группа совпавших тайлов
+     * @return void
+     */
+    private moveTilesToFreePlaces(  movedDistance: any[] ): void {
+
+        movedDistance.map( tile => {
+            const cntTlsMove = tile.rows;
+            const toY = ( tile.mvdTile.y + ( tile.mvdTile.height * cntTlsMove ) + ( Config.tileOffsetY * cntTlsMove ) );
+            tile.mvdTile.setRow( tile.mvdTile.getRow() + cntTlsMove );
+            new TWEEN.Tween( tile.mvdTile )
+                .to( { y: toY }, 500 )
+                .easing( TWEEN.Easing.Quadratic.Out )
+                .onComplete(() => {
+                    //this.tiles.addTiles( matchTiles );
+                })
+            .start();
+        });
     }
 }
