@@ -29,7 +29,6 @@ var Board = (function (_super) {
             var matchTiles = RecursiveSearchHelper_1.RecursiveSearchHelper.findNeighboringTiles(data.tile.getColl(), data.tile.getRow(), [], _this.tiles.getChildrens());
             _this.tiles.clearMatchTiles(matchTiles);
             _this.tiles.resetVisitedTiles();
-            _this.tiles.addTiles(matchTiles);
         });
     };
     Board.prototype.setBg = function () {

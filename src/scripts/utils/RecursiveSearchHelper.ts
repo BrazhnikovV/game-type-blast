@@ -1,6 +1,6 @@
 import PIXI = require("pixi.js");
 import in_array = require('in_array');
-import {Config} from "../config/Config";
+//import {Config} from "../config/Config";
 
 /**
  * RecursiveSearchHelper
@@ -73,7 +73,7 @@ export class RecursiveSearchHelper {
     private static findMatchingTilesByCollRow( c: number, r: number, tiles: PIXI.Container[] ): PIXI.Container[] {
 
         let index = this.getIndex( c, r, tiles );
-        let arr   = this.getNonDiagonalMatches( index, c, tiles )
+        let arr   = this.getNonDiagonalMatches( c, r, tiles )
         return arr.filter(
             tile => tile.getColor() === tiles[index].getColor()
         );
@@ -85,21 +85,14 @@ export class RecursiveSearchHelper {
      * @param c - номер колонки
      * @param tiles - весь набор тайло на доске
      */
-    private static getNonDiagonalMatches( index: number, c: number, tiles: PIXI.Container[] ): PIXI.Container[] {
+    private static getNonDiagonalMatches( c: number, r: number, tiles: PIXI.Container[] ): PIXI.Container[] {
 
         let arr: PIXI.Container[] = [];
 
-        if ( tiles.hasOwnProperty( index + Config.cols ) )
-            arr.push( tiles[index + Config.cols] );
-
-        if ( tiles.hasOwnProperty( index - Config.cols ) )
-            arr.push( tiles[index - Config.cols] );
-
-        if ( tiles.hasOwnProperty( index - 1 ) && c !== 0 )
-            arr.push( tiles[index - 1] );
-
-        if ( tiles.hasOwnProperty( index + 1 ) && c !== Config.cols - 1 )
-            arr.push( tiles[index + 1] );
+        arr.push(...tiles.filter( ( fTile  => fTile.getColl() === c && fTile.getRow() === r + 1 ) ) );
+        arr.push(...tiles.filter( ( fTile  => fTile.getColl() === c && fTile.getRow() === r - 1 ) ) );
+        arr.push(...tiles.filter( ( fTile  => fTile.getColl() === c + 1 && fTile.getRow() === r ) ) );
+        arr.push(...tiles.filter( ( fTile  => fTile.getColl() === c - 1 && fTile.getRow() === r ) ) );
 
         return arr;
     }

@@ -38,7 +38,7 @@ export class Board extends PIXI.Container {
             );
             this.tiles.clearMatchTiles( matchTiles );
             this.tiles.resetVisitedTiles();
-            this.tiles.addTiles( matchTiles );
+            //this.tiles.addTiles( matchTiles );
         });
     }
 

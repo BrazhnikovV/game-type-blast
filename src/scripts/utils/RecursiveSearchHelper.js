@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var in_array = require("in_array");
-var Config_1 = require("../config/Config");
 var RecursiveSearchHelper = (function () {
     function RecursiveSearchHelper() {
     }
@@ -40,19 +39,15 @@ var RecursiveSearchHelper = (function () {
     };
     RecursiveSearchHelper.findMatchingTilesByCollRow = function (c, r, tiles) {
         var index = this.getIndex(c, r, tiles);
-        var arr = this.getNonDiagonalMatches(index, c, tiles);
+        var arr = this.getNonDiagonalMatches(c, r, tiles);
         return arr.filter(function (tile) { return tile.getColor() === tiles[index].getColor(); });
     };
-    RecursiveSearchHelper.getNonDiagonalMatches = function (index, c, tiles) {
+    RecursiveSearchHelper.getNonDiagonalMatches = function (c, r, tiles) {
         var arr = [];
-        if (tiles.hasOwnProperty(index + Config_1.Config.cols))
-            arr.push(tiles[index + Config_1.Config.cols]);
-        if (tiles.hasOwnProperty(index - Config_1.Config.cols))
-            arr.push(tiles[index - Config_1.Config.cols]);
-        if (tiles.hasOwnProperty(index - 1) && c !== 0)
-            arr.push(tiles[index - 1]);
-        if (tiles.hasOwnProperty(index + 1) && c !== Config_1.Config.cols - 1)
-            arr.push(tiles[index + 1]);
+        arr.push.apply(arr, tiles.filter((function (fTile) { return fTile.getColl() === c && fTile.getRow() === r + 1; })));
+        arr.push.apply(arr, tiles.filter((function (fTile) { return fTile.getColl() === c && fTile.getRow() === r - 1; })));
+        arr.push.apply(arr, tiles.filter((function (fTile) { return fTile.getColl() === c + 1 && fTile.getRow() === r; })));
+        arr.push.apply(arr, tiles.filter((function (fTile) { return fTile.getColl() === c - 1 && fTile.getRow() === r; })));
         return arr;
     };
     return RecursiveSearchHelper;
