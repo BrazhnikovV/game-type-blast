@@ -22,14 +22,14 @@ export abstract class FactoryMethod {
      * createComponent
      * @param tiles - набор тайлов, которые необходимо создать
      */
-    protected abstract createComponent( tiles?: PIXI.Container[] );
+    protected abstract createComponent( tile?: {} );
 
     /**
      * create
      * @param tiles - набор тайлов, которые необходимо создать
      * @return PIXI.Container[]
      */
-    public create( tiles?: PIXI.Container[] ): PIXI.Container[] {
-        return this.createComponent( tiles );
+    public create( tile?: {} ): PIXI.Container[] {
+        return this.createComponent( tile );
     }
 }

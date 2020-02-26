@@ -12,6 +12,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var PIXI = require("pixi.js");
 var TilesFactory_1 = require("./factories/TilesFactory");
+var Config_1 = require("../config/Config");
 var TilesContainer = (function (_super) {
     __extends(TilesContainer, _super);
     function TilesContainer() {
@@ -44,6 +45,8 @@ var TilesContainer = (function (_super) {
     };
     TilesContainer.prototype.addTiles = function (tiles) {
         var _this = this;
+        for (var i = 0; i < (Config_1.Config.cols * Config_1.Config.rows); ++i) {
+        }
         this.tilesFactory.create(tiles).map(function (tile) {
             _super.prototype.addChild.call(_this, tile);
             return tile;

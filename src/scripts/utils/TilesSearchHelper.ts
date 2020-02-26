@@ -6,7 +6,7 @@ import in_array = require('in_array');
  * @version 1.0.1
  * @package utils
  */
-export class RecursiveSearchHelper {
+export class TilesSearchHelper {
 
     /**
      * findNeighboringTiles - найти все прилегающие тайлы

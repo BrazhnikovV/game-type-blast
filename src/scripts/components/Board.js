@@ -13,9 +13,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var PIXI = require("pixi.js");
 var TWEEN = require("@tweenjs/tween.js");
 var Application_1 = require("../core/Application");
-var RecursiveSearchHelper_1 = require("../utils/RecursiveSearchHelper");
 var TilesContainer_1 = require("./TilesContainer");
 var Config_1 = require("../config/Config");
+var TilesSearchHelper_1 = require("../utils/TilesSearchHelper");
 var Board = (function (_super) {
     __extends(Board, _super);
     function Board() {
@@ -39,22 +39,28 @@ var Board = (function (_super) {
         _super.prototype.addChild.call(this, this.tiles);
     };
     Board.prototype.handleClickOnTiles = function (data) {
-        var matchTiles = RecursiveSearchHelper_1.RecursiveSearchHelper.findNeighboringTiles(data.tile.getColl(), data.tile.getRow(), [], this.tiles.getChildrens());
-        this.tiles.clearMatchTiles(matchTiles);
-        this.tiles.resetVisitedTiles();
-        var movedTiles = RecursiveSearchHelper_1.RecursiveSearchHelper.getTilesToBeMoved(matchTiles, this.tiles.getChildrens());
-        var movedTilesWithDistance = RecursiveSearchHelper_1.RecursiveSearchHelper.getMovementDistance(movedTiles, matchTiles);
-        this.moveTilesToFreePlaces(movedTilesWithDistance);
+        var tiles = this.tiles.getChildrens();
+        var mchTiles = TilesSearchHelper_1.TilesSearchHelper.findNeighboringTiles(data.tile.getColl(), data.tile.getRow(), [], tiles);
+        if (mchTiles.length > 1) {
+            this.tiles.clearMatchTiles(mchTiles);
+            this.tiles.resetVisitedTiles();
+            var mvdTiles = TilesSearchHelper_1.TilesSearchHelper.getTilesToBeMoved(mchTiles, tiles);
+            var movedTilesWithDistance = TilesSearchHelper_1.TilesSearchHelper.getMovementDistance(mvdTiles, mchTiles);
+            this.moveTilesToFreePlaces(movedTilesWithDistance);
+        }
     };
     Board.prototype.moveTilesToFreePlaces = function (movedDistance) {
+        var _this = this;
         movedDistance.map(function (tile) {
-            var cntTlsMove = tile.rows;
-            var toY = (tile.mvdTile.y + (tile.mvdTile.height * cntTlsMove) + (Config_1.Config.tileOffsetY * cntTlsMove));
-            tile.mvdTile.setRow(tile.mvdTile.getRow() + cntTlsMove);
+            var offsetY = Config_1.Config.tileOffsetY * tile.rows;
+            var distance = tile.mvdTile.height * tile.rows;
+            var targetY = tile.mvdTile.y + distance + offsetY;
+            tile.mvdTile.setRow(tile.mvdTile.getRow() + tile.rows);
             new TWEEN.Tween(tile.mvdTile)
-                .to({ y: toY }, 500)
+                .to({ y: targetY }, 500)
                 .easing(TWEEN.Easing.Quadratic.Out)
                 .onComplete(function () {
+                _this.handleClickOnTiles({ 'tile': tile.mvdTile });
             })
                 .start();
         });

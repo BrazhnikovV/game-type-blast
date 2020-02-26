@@ -5,8 +5,8 @@ var FactoryMethod = (function () {
         this.ADDITIONAL = 0;
         this.INITIAL = 1;
     }
-    FactoryMethod.prototype.create = function (tiles) {
-        return this.createComponent(tiles);
+    FactoryMethod.prototype.create = function (tile) {
+        return this.createComponent(tile);
     };
     return FactoryMethod;
 }());

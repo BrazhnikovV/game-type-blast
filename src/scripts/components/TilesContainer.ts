@@ -1,5 +1,6 @@
 import PIXI = require("pixi.js");
 import {TilesFactory} from "./factories/TilesFactory";
+import {Config} from "../config/Config";
 
 /**
  * TilesContainer
@@ -66,6 +67,9 @@ export class TilesContainer extends PIXI.Container {
      * @return void
      */
     public addTiles( tiles: PIXI.Container[] ): void {
+        for ( let i = 0; i < ( Config.cols * Config.rows ); ++i ) {
+
+        }
         this.tilesFactory.create( tiles ).map( tile => {
             super.addChild( tile );
             return tile;

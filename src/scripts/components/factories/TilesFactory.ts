@@ -15,13 +15,13 @@ export class TilesFactory extends FactoryMethod {
      * @param type - тип создаваемого набора тайлов
      * @return PIXI.Container[]
      */
-    protected createComponent( tiles: PIXI.Container[] ): PIXI.Container[] {
-        switch( tiles ) {
+    protected createComponent( tile: {} ): PIXI.Container[] {
+        switch( tile ) {
             case undefined:
                 return this.initTiles();
             break;
             default:
-                return this.addTiles( tiles );
+                return this.addTiles( tile );
             break;
         }
         return [];
@@ -50,13 +50,10 @@ export class TilesFactory extends FactoryMethod {
      * addTiles - добавляет необходимые тайлы
      * @return void
      */
-    private addTiles( matchTiles: PIXI.Container[] ): PIXI.Container[] {
+    private addTiles( tile: {} ): PIXI.Container {
 
-        let tiles: PIXI.Container[] = [];
-        matchTiles.map( ( tile, index ) => {
-            tiles.push( new Tile() );
-            this.setParameters( tiles[index], tile.getColl(), tile.getRow() );
-        });
+        let tiles: PIXI.Container = new Tile();
+        console.log(tile);
 
         return tiles;
     }

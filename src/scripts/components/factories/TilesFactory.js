@@ -18,13 +18,13 @@ var TilesFactory = (function (_super) {
     function TilesFactory() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    TilesFactory.prototype.createComponent = function (tiles) {
-        switch (tiles) {
+    TilesFactory.prototype.createComponent = function (tile) {
+        switch (tile) {
             case undefined:
                 return this.initTiles();
                 break;
             default:
-                return this.addTiles(tiles);
+                return this.addTiles(tile);
                 break;
         }
         return [];
@@ -42,13 +42,9 @@ var TilesFactory = (function (_super) {
         }
         return tiles;
     };
-    TilesFactory.prototype.addTiles = function (matchTiles) {
-        var _this = this;
-        var tiles = [];
-        matchTiles.map(function (tile, index) {
-            tiles.push(new Tile_1.Tile());
-            _this.setParameters(tiles[index], tile.getColl(), tile.getRow());
-        });
+    TilesFactory.prototype.addTiles = function (tile) {
+        var tiles = new Tile_1.Tile();
+        console.log(tile);
         return tiles;
     };
     TilesFactory.prototype.setParameters = function (tile, coll, row) {

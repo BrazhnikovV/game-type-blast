@@ -1,9 +1,9 @@
 import PIXI = require("pixi.js");
 import TWEEN = require('@tweenjs/tween.js');
 import {Application} from "../core/Application";
-import {RecursiveSearchHelper} from "../utils/RecursiveSearchHelper";
 import {TilesContainer} from "./TilesContainer";
 import {Config} from "../config/Config";
+import {TilesSearchHelper} from "../utils/TilesSearchHelper";
 
 /**
  * Board
@@ -63,35 +63,42 @@ export class Board extends PIXI.Container {
      */
     private handleClickOnTiles( data ): void {
 
-        let matchTiles = RecursiveSearchHelper.findNeighboringTiles(
-            data.tile.getColl(), data.tile.getRow(), [], this.tiles.getChildrens()
+        let tiles    = this.tiles.getChildrens();
+        let mchTiles = TilesSearchHelper.findNeighboringTiles(
+            data.tile.getColl(), data.tile.getRow(), [], tiles
         );
-        this.tiles.clearMatchTiles( matchTiles );
-        this.tiles.resetVisitedTiles();
 
-        let movedTiles = RecursiveSearchHelper.getTilesToBeMoved( matchTiles, this.tiles.getChildrens() );
-        let movedTilesWithDistance = RecursiveSearchHelper.getMovementDistance( movedTiles, matchTiles );
+        if ( mchTiles.length > 1 ) {
+            this.tiles.clearMatchTiles( mchTiles );
+            this.tiles.resetVisitedTiles();
 
-        this.moveTilesToFreePlaces( movedTilesWithDistance );
+            let mvdTiles = TilesSearchHelper.getTilesToBeMoved( mchTiles, tiles );
+            let movedTilesWithDistance = TilesSearchHelper.getMovementDistance( mvdTiles, mchTiles );
+
+            this.moveTilesToFreePlaces( movedTilesWithDistance );
+        }
     }
 
     /**
      * moveTilesToFreePlaces - переместить оставшиеся тайлы после
      * уничтожения группы совпавших на освободившиеся места
-     * @param moveTiles - набор тайлов, которые необходимо переместить
-     * @param matchTiles - группа совпавших тайлов
+     * @param movedDistance - набор тайлов, которые необходимо переместить
      * @return void
      */
     private moveTilesToFreePlaces(  movedDistance: any[] ): void {
 
         movedDistance.map( tile => {
-            const cntTlsMove = tile.rows;
-            const toY = ( tile.mvdTile.y + ( tile.mvdTile.height * cntTlsMove ) + ( Config.tileOffsetY * cntTlsMove ) );
-            tile.mvdTile.setRow( tile.mvdTile.getRow() + cntTlsMove );
+            const offsetY  = Config.tileOffsetY * tile.rows;
+            const distance = tile.mvdTile.height * tile.rows;
+            const targetY  = tile.mvdTile.y + distance + offsetY;
+
+            tile.mvdTile.setRow( tile.mvdTile.getRow() + tile.rows );
+
             new TWEEN.Tween( tile.mvdTile )
-                .to( { y: toY }, 500 )
+                .to( { y: targetY }, 500 )
                 .easing( TWEEN.Easing.Quadratic.Out )
                 .onComplete(() => {
+                    this.handleClickOnTiles( { 'tile' : tile.mvdTile } );
                     //this.tiles.addTiles( matchTiles );
                 })
             .start();
