@@ -66,8 +66,6 @@ export class TilesContainer extends PIXI.Container {
      * @param tiles - уничтоженные тайлы
      * @return void
      */
-    // Fixme разобратья с solid относительно функции initTiles в TilesFactory
-    // ======================================================================
     public addTiles( ): void {
         let coll, row = 0;
         for ( let i = 0; i < ( Config.cols * Config.rows ); ++i ) {
@@ -77,7 +75,6 @@ export class TilesContainer extends PIXI.Container {
             if ( arr.length === 0 ) {
                 let tile = this.tilesFactory.create({ 'coll': coll, 'row': row });
                 super.addChild( tile );
-                //return tile;
             }
         }
     }
