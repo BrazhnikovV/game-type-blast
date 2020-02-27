@@ -7,18 +7,6 @@ import PIXI = require("pixi.js");
 export abstract class FactoryMethod {
 
     /**
-     *  @access protected
-     *  @var ADDITIONAL: number
-     */
-    protected ADDITIONAL: number = 0;
-
-    /**
-     *  @access protected
-     *  @var INITIAL: number
-     */
-    protected INITIAL: number = 1;
-
-    /**
      * createComponent
      * @param tiles - набор тайлов, которые необходимо создать
      */
