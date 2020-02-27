@@ -44,7 +44,7 @@
     "in_array": "^1.1.0"
   },
   "settings": {
-    "debug": true,
+    "debug": false,
     "tsconfig": {
       "debug": "tsconfig.debug.json",
       "release": "tsconfig.json"

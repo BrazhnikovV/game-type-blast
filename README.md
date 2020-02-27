@@ -1,37 +1,9 @@
-# Pixi.js Project #
+# Игра типа "BLAST" (typescript, pixijs) #
 
 A generic frontend **Pixi.js** project boiler plate in **TypeScript** with **source map** support.
 
-Main features:
-
-* Source Map support
-* Incremental Build
-* Unit tests
-* Browser auto-refresh
-
-
-Main dependencies:
-
-* **Application Server**: [Node](https://nodejs.org/en/)
-* **Compiler**: [TypeScript](https://github.com/Microsoft/TypeScript)
-* **Linter**: [TSLint](https://github.com/palantir/tslint)
-* **Task Runner**: [Gulp](https://github.com/gulpjs/gulp)
-* **JavaScript File Bundler**: [Browserify](https://github.com/substack/node-browserify)
-* **Code Minifier**: [Uglify](https://github.com/mishoo/UglifyJS2)
-* **HTTP Server**: [BrowserSync](https://github.com/Browsersync/browsersync.github.io)
-* **Unit Test Runner**: [Tape](https://github.com/substack/tape)
-* **Pixi.js**: [Pixi.js](http://www.pixijs.com/)
-
-
-## Installation ##
-
-Node, TypeScript and TSLint should be installed globally.
-
-	$> git clone https://github.com/yahiko00/PixiProject.git <new folder>
-	$> cd <new folder>
-	$> git init
-	$> npm install
-
+## Install ##
+	$> npm run install
 
 ## Build ##
 
@@ -48,6 +20,19 @@ The following command builds the project, runs unit tests, and opens the browser
 For more predefined commands, see `package.json`, item `scripts`.
 
 Unit tests are logged in the `tests/` folder, file `tape.log`.
+
+## Build PROD ##
+Set the debug property to false:
+
+	"settings": {
+	    "debug": false,
+	    "tsconfig": {
+	      "debug": "tsconfig.debug.json",
+	      "release": "tsconfig.json"
+	    },
+	  }
+
+	$> npm run compile
 
 ## Contributors ##
 
