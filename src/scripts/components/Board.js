@@ -41,13 +41,11 @@ var Board = (function (_super) {
     Board.prototype.handleClickOnTiles = function (data) {
         var tiles = this.tiles.getChildrens();
         var mchTiles = TilesSearchHelper_1.TilesSearchHelper.findNeighboringTiles(data.tile.getColl(), data.tile.getRow(), [], tiles);
-        if (mchTiles.length > 1) {
-            this.tiles.clearMatchTiles(mchTiles);
-            this.tiles.resetVisitedTiles();
-            var mvdTiles = TilesSearchHelper_1.TilesSearchHelper.getTilesToBeMoved(mchTiles, tiles);
-            var movedTilesWithDistance = TilesSearchHelper_1.TilesSearchHelper.getMovementDistance(mvdTiles, mchTiles);
-            this.moveTilesToFreePlaces(movedTilesWithDistance);
-        }
+        this.tiles.clearMatchTiles(mchTiles);
+        this.tiles.resetVisitedTiles();
+        var mvdTiles = TilesSearchHelper_1.TilesSearchHelper.getTilesToBeMoved(mchTiles, tiles);
+        var movedTilesWithDistance = TilesSearchHelper_1.TilesSearchHelper.getMovementDistance(mvdTiles, mchTiles);
+        this.moveTilesToFreePlaces(movedTilesWithDistance);
     };
     Board.prototype.moveTilesToFreePlaces = function (movedDistance) {
         var _this = this;
@@ -57,12 +55,11 @@ var Board = (function (_super) {
             var targetY = tile.mvdTile.y + distance + offsetY;
             tile.mvdTile.setRow(tile.mvdTile.getRow() + tile.rows);
             new TWEEN.Tween(tile.mvdTile)
-                .to({ y: targetY }, 500)
+                .to({ y: targetY }, 1000)
                 .easing(TWEEN.Easing.Quadratic.Out)
                 .onComplete(function () {
-                _this.handleClickOnTiles({ 'tile': tile.mvdTile });
-            })
-                .start();
+                _this.tiles.addTiles();
+            }).start();
         });
     };
     return Board;

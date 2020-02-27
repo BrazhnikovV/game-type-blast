@@ -68,15 +68,13 @@ export class Board extends PIXI.Container {
             data.tile.getColl(), data.tile.getRow(), [], tiles
         );
 
-        if ( mchTiles.length > 1 ) {
-            this.tiles.clearMatchTiles( mchTiles );
-            this.tiles.resetVisitedTiles();
+        this.tiles.clearMatchTiles( mchTiles );
+        this.tiles.resetVisitedTiles();
 
-            let mvdTiles = TilesSearchHelper.getTilesToBeMoved( mchTiles, tiles );
-            let movedTilesWithDistance = TilesSearchHelper.getMovementDistance( mvdTiles, mchTiles );
+        let mvdTiles = TilesSearchHelper.getTilesToBeMoved( mchTiles, tiles );
+        let movedTilesWithDistance = TilesSearchHelper.getMovementDistance( mvdTiles, mchTiles );
 
-            this.moveTilesToFreePlaces( movedTilesWithDistance );
-        }
+        this.moveTilesToFreePlaces( movedTilesWithDistance );
     }
 
     /**
@@ -95,13 +93,11 @@ export class Board extends PIXI.Container {
             tile.mvdTile.setRow( tile.mvdTile.getRow() + tile.rows );
 
             new TWEEN.Tween( tile.mvdTile )
-                .to( { y: targetY }, 500 )
+                .to( { y: targetY }, 1000 )
                 .easing( TWEEN.Easing.Quadratic.Out )
                 .onComplete(() => {
-                    this.handleClickOnTiles( { 'tile' : tile.mvdTile } );
-                    //this.tiles.addTiles( matchTiles );
-                })
-            .start();
+                    this.tiles.addTiles();
+                }).start();
         });
     }
 }

@@ -21,7 +21,7 @@ export class TilesFactory extends FactoryMethod {
                 return this.initTiles();
             break;
             default:
-                return this.addTiles( tile );
+                return this.addTile( tile );
             break;
         }
         return [];
@@ -40,7 +40,7 @@ export class TilesFactory extends FactoryMethod {
             coll = i % Config.cols;
 
             tiles.push( new Tile() );
-            this.setParameters( tiles[i], coll, row );;
+            this.setParameters( tiles[i], coll, row );
         }
 
         return tiles;
@@ -50,12 +50,12 @@ export class TilesFactory extends FactoryMethod {
      * addTiles - добавляет необходимые тайлы
      * @return void
      */
-    private addTiles( tile: {} ): PIXI.Container {
+    private addTile( tile: {} ): PIXI.Container {
 
-        let tiles: PIXI.Container = new Tile();
-        console.log(tile);
+        let t: PIXI.Container = new Tile();
+        this.setParameters( t, tile['coll'], tile['row'] );
 
-        return tiles;
+        return t;
     }
 
     /**

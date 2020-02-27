@@ -24,7 +24,7 @@ var TilesFactory = (function (_super) {
                 return this.initTiles();
                 break;
             default:
-                return this.addTiles(tile);
+                return this.addTile(tile);
                 break;
         }
         return [];
@@ -38,14 +38,13 @@ var TilesFactory = (function (_super) {
             coll = i % Config_1.Config.cols;
             tiles.push(new Tile_1.Tile());
             this.setParameters(tiles[i], coll, row);
-            ;
         }
         return tiles;
     };
-    TilesFactory.prototype.addTiles = function (tile) {
-        var tiles = new Tile_1.Tile();
-        console.log(tile);
-        return tiles;
+    TilesFactory.prototype.addTile = function (tile) {
+        var t = new Tile_1.Tile();
+        this.setParameters(t, tile['coll'], tile['row']);
+        return t;
     };
     TilesFactory.prototype.setParameters = function (tile, coll, row) {
         this.setTileCollRow(tile, coll, row);
