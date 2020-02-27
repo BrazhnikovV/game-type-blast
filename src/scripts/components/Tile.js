@@ -19,6 +19,8 @@ var Tile = (function (_super) {
         var _this = _super.call(this) || this;
         _this.colors = ['blue', 'green', 'purple', 'red', 'yellow'];
         _this.color = '';
+        _this.scores = [40, 60, 80, 100, 120];
+        _this.score = 0;
         _this.visited = false;
         _this.coll = 0;
         _this.row = 0;
@@ -26,7 +28,9 @@ var Tile = (function (_super) {
         return _this;
     }
     Tile.prototype.setBg = function () {
-        this.color = this.colors[RandomHelper_1.RandomHelper.getRandomInt(4)];
+        var rndInd = RandomHelper_1.RandomHelper.getRandomInt(4);
+        this.color = this.colors[rndInd];
+        this.score = this.scores[rndInd];
         this.bg = PIXI.Sprite.fromImage('images/tiles/' + this.color + '.png');
         this.bg.width = 160;
         this.bg.height = 160;
@@ -55,6 +59,9 @@ var Tile = (function (_super) {
     };
     Tile.prototype.getColor = function () {
         return this.color;
+    };
+    Tile.prototype.getScore = function () {
+        return this.score;
     };
     Tile.prototype.getWitdh = function () {
         return this.bg.width;

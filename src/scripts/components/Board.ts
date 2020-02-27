@@ -16,6 +16,12 @@ export class Board extends PIXI.Container {
      *  @access private
      *  @var preloader: PIXI.Sprite
      */
+    private gp: PIXI.Container;
+
+    /**
+     *  @access private
+     *  @var preloader: PIXI.Sprite
+     */
     private bg: PIXI.Sprite;
 
     /**
@@ -25,17 +31,45 @@ export class Board extends PIXI.Container {
     private tiles: TilesContainer = new TilesContainer();
 
     /**
+     *  @access private
+     *  @var isDisabled: boolean
+     */
+    private isDisabled: boolean = false;
+
+    /**
      * constructor - конструктор
      */
-    constructor() {
+    constructor( gp: PIXI.Container ) {
         super();
+        this.gp = gp;
+        this.gp.startTime();
     }
 
     public init(): void {
         this.setBg();
         this.setTiles();
         Application.ee.on('onClickTile', ( data ) => {
-            this.handleClickOnTiles( data );
+            if ( !this.isDisabled ) {
+                this.handleClickOnTiles( data );
+            }
+        });
+        Application.ee.on('onEndTime', () => {
+            alert('Game over!');
+            let isBegin = confirm("Назать заново?");
+            if ( isBegin ) {
+                this.gp.resetGame();
+            } else {
+                window.close();
+            }
+        });
+        Application.ee.on('onWinGame', () => {
+            alert('You Win!!!');
+            let isBegin = confirm("Назать заново?");
+            if ( isBegin ) {
+                this.gp.resetGame();
+            } else {
+                window.close();
+            }
         });
     }
 
@@ -63,6 +97,8 @@ export class Board extends PIXI.Container {
      */
     private handleClickOnTiles( data ): void {
 
+        this.isDisabled = true;
+
         let tiles    = this.tiles.getChildrens();
         let mchTiles = TilesSearchHelper.findNeighboringTiles(
             data.tile.getColl(), data.tile.getRow(), [], tiles
@@ -74,7 +110,13 @@ export class Board extends PIXI.Container {
         let mvdTiles = TilesSearchHelper.getTilesToBeMoved( mchTiles, tiles );
         let movedTilesWithDistance = TilesSearchHelper.getMovementDistance( mvdTiles, mchTiles );
 
+        if ( mvdTiles.length === 0 ) {
+            this.isDisabled = false;
+        }
+
         this.moveTilesToFreePlaces( movedTilesWithDistance );
+        this.gp.decrementNumberMoves();
+        this.gp.addScore( mchTiles[0].getScore() * mchTiles.length );
     }
 
     /**
@@ -97,6 +139,7 @@ export class Board extends PIXI.Container {
                 .easing( TWEEN.Easing.Quadratic.Out )
                 .onComplete(() => {
                     this.tiles.addTiles();
+                    this.isDisabled = false;
                 }).start();
         });
     }

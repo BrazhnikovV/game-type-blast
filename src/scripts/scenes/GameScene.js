@@ -13,25 +13,31 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var PIXI = require("pixi.js");
 var Board_1 = require("../components/Board");
 var Config_1 = require("../config/Config");
+var GameProcess_1 = require("../components/GameProcess");
 var GameScene = (function (_super) {
     __extends(GameScene, _super);
     function GameScene() {
         var _this = _super.call(this) || this;
         _this.setBg();
         _this.setBoard();
-        _super.prototype.addChild.call(_this, _this.bg);
-        _super.prototype.addChild.call(_this, _this.board);
         return _this;
     }
     GameScene.prototype.setBg = function () {
         this.bg = PIXI.Sprite.fromImage('images/bg.png');
         this.bg.interactive = true;
+        _super.prototype.addChild.call(this, this.bg);
     };
     GameScene.prototype.setBoard = function () {
-        this.board = new Board_1.Board();
+        this.setGameProcess();
+        this.board = new Board_1.Board(this.gameProcess);
         this.board.init();
         this.board.x = Config_1.Config.boardX;
         this.board.y = Config_1.Config.boardY;
+        _super.prototype.addChild.call(this, this.board);
+    };
+    GameScene.prototype.setGameProcess = function () {
+        this.gameProcess = new GameProcess_1.GameProcess();
+        _super.prototype.addChild.call(this, this.gameProcess);
     };
     return GameScene;
 }(PIXI.Container));

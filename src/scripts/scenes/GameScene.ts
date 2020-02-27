@@ -1,14 +1,15 @@
 import PIXI = require("pixi.js");
 import {Board} from "../components/Board";
 import {Config} from "../config/Config";
+import {GameProcess} from "../components/GameProcess";
 
 export class GameScene extends PIXI.Container implements IScene {
 
     /**
      *  @access public
-     *  @var stage: PIXI.Container
+     *  @var gameProcess: PIXI.Container
      */
-    public container: PIXI.Container;
+    private gameProcess: PIXI.Container;
 
     /**
      *  @access private
@@ -30,8 +31,6 @@ export class GameScene extends PIXI.Container implements IScene {
         super();
         this.setBg();
         this.setBoard();
-        super.addChild( this.bg );
-        super.addChild( this.board );
     }
 
     /**
@@ -41,6 +40,7 @@ export class GameScene extends PIXI.Container implements IScene {
     public setBg(): void {
         this.bg = PIXI.Sprite.fromImage('images/bg.png');
         this.bg.interactive = true;
+        super.addChild( this.bg );
     }
 
     /**
@@ -48,9 +48,18 @@ export class GameScene extends PIXI.Container implements IScene {
      * @return void
      */
     public setBoard(): void {
-        this.board = new Board();
+        this.setGameProcess();
+
+        this.board = new Board( this.gameProcess );
         this.board.init();
         this.board.x = Config.boardX;
         this.board.y = Config.boardY;
+
+        super.addChild( this.board );
+    }
+
+    private setGameProcess(): void {
+        this.gameProcess = new GameProcess();
+        super.addChild( this.gameProcess );
     }
 }

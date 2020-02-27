@@ -18,9 +18,12 @@ var Config_1 = require("../config/Config");
 var TilesSearchHelper_1 = require("../utils/TilesSearchHelper");
 var Board = (function (_super) {
     __extends(Board, _super);
-    function Board() {
+    function Board(gp) {
         var _this = _super.call(this) || this;
         _this.tiles = new TilesContainer_1.TilesContainer();
+        _this.isDisabled = false;
+        _this.gp = gp;
+        _this.gp.startTime();
         return _this;
     }
     Board.prototype.init = function () {
@@ -28,7 +31,29 @@ var Board = (function (_super) {
         this.setBg();
         this.setTiles();
         Application_1.Application.ee.on('onClickTile', function (data) {
-            _this.handleClickOnTiles(data);
+            if (!_this.isDisabled) {
+                _this.handleClickOnTiles(data);
+            }
+        });
+        Application_1.Application.ee.on('onEndTime', function () {
+            alert('Game over!');
+            var isBegin = confirm("Назать заново?");
+            if (isBegin) {
+                _this.gp.resetGame();
+            }
+            else {
+                window.close();
+            }
+        });
+        Application_1.Application.ee.on('onWinGame', function () {
+            alert('You Win!!!');
+            var isBegin = confirm("Назать заново?");
+            if (isBegin) {
+                _this.gp.resetGame();
+            }
+            else {
+                window.close();
+            }
         });
     };
     Board.prototype.setBg = function () {
@@ -39,13 +64,19 @@ var Board = (function (_super) {
         _super.prototype.addChild.call(this, this.tiles);
     };
     Board.prototype.handleClickOnTiles = function (data) {
+        this.isDisabled = true;
         var tiles = this.tiles.getChildrens();
         var mchTiles = TilesSearchHelper_1.TilesSearchHelper.findNeighboringTiles(data.tile.getColl(), data.tile.getRow(), [], tiles);
         this.tiles.clearMatchTiles(mchTiles);
         this.tiles.resetVisitedTiles();
         var mvdTiles = TilesSearchHelper_1.TilesSearchHelper.getTilesToBeMoved(mchTiles, tiles);
         var movedTilesWithDistance = TilesSearchHelper_1.TilesSearchHelper.getMovementDistance(mvdTiles, mchTiles);
+        if (mvdTiles.length === 0) {
+            this.isDisabled = false;
+        }
         this.moveTilesToFreePlaces(movedTilesWithDistance);
+        this.gp.decrementNumberMoves();
+        this.gp.addScore(mchTiles[0].getScore() * mchTiles.length);
     };
     Board.prototype.moveTilesToFreePlaces = function (movedDistance) {
         var _this = this;
@@ -59,6 +90,7 @@ var Board = (function (_super) {
                 .easing(TWEEN.Easing.Quadratic.Out)
                 .onComplete(function () {
                 _this.tiles.addTiles();
+                _this.isDisabled = false;
             }).start();
         });
     };

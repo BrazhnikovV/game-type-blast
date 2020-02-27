@@ -65,4 +65,70 @@ export class Config {
      *  @var static boardHeight: number
      */
     public static boardY: number = 430;
+
+    /**
+     *  @access public
+     *  @var static gameTimeCount: number
+     */
+    public static gameTimeCount: number = 30;
+
+    /**
+     *  @access public
+     *  @var static gameMinScore: number
+     */
+    public static gameMinScore: number = 2000;
+
+    /**
+     *  @access public
+     *  @var static gameMinScoreX: number
+     */
+    public static gameMinScoreX: number = 2650;
+
+    /**
+     *  @access public
+     *  @var static gameMinScoreY: number
+     */
+    public static gameMinScoreY: number = 145;
+
+    /**
+     *  @access public
+     *  @var static gameTimeX: number
+     */
+    public static gameTimeX: number = 2735;
+
+    /**
+     *  @access public
+     *  @var static gameTimeY: number
+     */
+    public static gameTimeY: number = 875;
+
+    /**
+     *  @access public
+     *  @var static gameTimeX: number
+     */
+    public static gameScoreX: number = 2730;
+
+    /**
+     *  @access public
+     *  @var static gameTimeY: number
+     */
+    public static gameScoreY: number = 1375;
+
+    /**
+     *  @access public
+     *  @var static gameNumberMovesX: number
+     */
+    public static gameNumberMovesX: number = 650;
+
+    /**
+     *  @access public
+     *  @var static gameNumberMovesY: number
+     */
+    public static gameNumberMovesY: number = 145;
+
+    /**
+     *  @access public
+     *  @var static gameNumberMoves: number
+     */
+    public static gameNumberMoves: number = 10;
 }

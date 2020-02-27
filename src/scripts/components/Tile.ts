@@ -29,6 +29,18 @@ export class Tile extends PIXI.Container {
 
     /**
      *  @access private
+     *  @var colors: number[]
+     */
+    private scores: number[] = [40,60,80,100,120];
+
+    /**
+     *  @access private
+     *  @var colors: number[]
+     */
+    private score: number = 0;
+
+    /**
+     *  @access private
      *  @var visited: boolean
      */
     private visited: boolean = false;
@@ -58,11 +70,14 @@ export class Tile extends PIXI.Container {
      * @return void
      */
     public setBg(): void {
-        this.color = this.colors[RandomHelper.getRandomInt(4)];
+
+        let rndInd = RandomHelper.getRandomInt(4);
+        this.color = this.colors[rndInd];
+        this.score = this.scores[rndInd];
+
         this.bg = PIXI.Sprite.fromImage( 'images/tiles/' + this.color + '.png' );
         this.bg.width  = 160;
         this.bg.height = 160;
-
         this.bg.interactive = true;
         this.bg.buttonMode  = true;
         this.bg.on('pointerdown', this.clickListener );
@@ -126,6 +141,14 @@ export class Tile extends PIXI.Container {
      */
     public getColor(): string {
         return this.color;
+    }
+
+    /**
+     * getScore
+     * @return string
+     */
+    public getScore(): number {
+        return this.score;
     }
 
     /**
