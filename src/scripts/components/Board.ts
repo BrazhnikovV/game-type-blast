@@ -140,14 +140,12 @@ export class Board extends PIXI.Container {
 
         Application.ee.on('onEndTime', () => {
             alert('Game over!');
-            let isBegin = confirm("Назать заново?");
-            this.resetOrCloseGame( isBegin );
+            this.resetOrCloseGame(confirm("Назать заново?"));
         });
 
         Application.ee.on('onWinGame', () => {
             alert('You Win!!!');
-            let isBegin = confirm("Назать заново?");
-            this.resetOrCloseGame( isBegin );
+            this.resetOrCloseGame(confirm("Назать заново?"));
         });
     }
 
@@ -159,6 +157,8 @@ export class Board extends PIXI.Container {
         if ( isBegin ) {
             this.gp.resetGame();
         } else {
+            this.gp.stopTime();
+            this.isDisabled = true;
             window.close();
         }
     }

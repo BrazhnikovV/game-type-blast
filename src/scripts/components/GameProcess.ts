@@ -35,6 +35,12 @@ export class GameProcess extends PIXI.Container {
 
     /**
      *  @access private
+     *  @var tId: number
+     */
+    private tId: number = 0;
+
+    /**
+     *  @access private
      *  @var style: PIXI.TextStyle
      */
     private style: PIXI.TextStyle = new PIXI.TextStyle({
@@ -98,17 +104,25 @@ export class GameProcess extends PIXI.Container {
     }
 
     /**
-     * setTime - установить время игрового процесса
+     * setTime - запустить время игрового процесса
      * @return void
      */
     public startTime(): void {
-        let tId = setInterval( () => {
+        this.tId = setInterval( () => {
             if ( parseInt( this.time.text ) === 1 ) {
                 Application.ee.emit('onEndTime', {} );
-                clearInterval( tId );
+                clearInterval( this.tId );
             }
             this.time.text = ( parseInt( this.time.text ) - 1) + '';
         },1000 );
+    }
+
+    /**
+     * stopTime - остановить время игрового процесса
+     * @return void
+     */
+    public stopTime(): void {
+        clearInterval( this.tId );
     }
 
     /**

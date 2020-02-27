@@ -17,6 +17,7 @@ var GameProcess = (function (_super) {
     __extends(GameProcess, _super);
     function GameProcess() {
         var _this = _super.call(this) || this;
+        _this.tId = 0;
         _this.style = new PIXI.TextStyle({
             fontFamily: 'Arial',
             fontSize: 96,
@@ -56,13 +57,16 @@ var GameProcess = (function (_super) {
     };
     GameProcess.prototype.startTime = function () {
         var _this = this;
-        var tId = setInterval(function () {
+        this.tId = setInterval(function () {
             if (parseInt(_this.time.text) === 1) {
                 Application_1.Application.ee.emit('onEndTime', {});
-                clearInterval(tId);
+                clearInterval(_this.tId);
             }
             _this.time.text = (parseInt(_this.time.text) - 1) + '';
         }, 1000);
+    };
+    GameProcess.prototype.stopTime = function () {
+        clearInterval(this.tId);
     };
     GameProcess.prototype.setScores = function () {
         this.score = new PIXI.Text('0', this.style);
