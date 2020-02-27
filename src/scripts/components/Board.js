@@ -78,11 +78,13 @@ var Board = (function (_super) {
         });
         Application_1.Application.ee.on('onEndTime', function () {
             alert('Game over!');
-            _this.resetOrCloseGame(confirm("Назать заново?"));
+            var isBegin = confirm("Назать заново?");
+            _this.resetOrCloseGame(isBegin);
         });
         Application_1.Application.ee.on('onWinGame', function () {
             alert('You Win!!!');
-            _this.resetOrCloseGame(confirm("Назать заново?"));
+            var isBegin = confirm("Назать заново?");
+            _this.resetOrCloseGame(isBegin);
         });
     };
     Board.prototype.resetOrCloseGame = function (isBegin) {

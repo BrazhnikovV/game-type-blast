@@ -140,12 +140,14 @@ export class Board extends PIXI.Container {
 
         Application.ee.on('onEndTime', () => {
             alert('Game over!');
-            this.resetOrCloseGame(confirm("Назать заново?"));
+            let isBegin = confirm("Назать заново?");
+            this.resetOrCloseGame( isBegin );
         });
 
         Application.ee.on('onWinGame', () => {
             alert('You Win!!!');
-            this.resetOrCloseGame(confirm("Назать заново?"));
+            let isBegin = confirm("Назать заново?");
+            this.resetOrCloseGame( isBegin );
         });
     }
 

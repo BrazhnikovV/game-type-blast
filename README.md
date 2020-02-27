@@ -32,7 +32,7 @@ Set the debug property to false:
 	    },
 	  }
 
-	$> npm run compile
+	$> npm run default
 
 ## Contributors ##
 
