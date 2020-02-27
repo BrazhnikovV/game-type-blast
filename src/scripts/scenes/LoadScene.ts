@@ -39,7 +39,9 @@ export class LoadScene extends PIXI.Container implements IScene {
         this.preloader   = PIXI.Sprite.fromImage( 'images/preloader.gif' );
         this.preloader.x = Config.screenWidth / 2;
         this.preloader.y = Config.screenHeight / 2;
-        this.preloader.anchor.set( 0.5 );
+        this.preloader.anchor.set( 0.5, 0.5 );
+        this.preloader.width  = 300;
+        this.preloader.height = 300;
     }
 
     /**

@@ -27,34 +27,9 @@ var Board = (function (_super) {
         return _this;
     }
     Board.prototype.init = function () {
-        var _this = this;
         this.setBg();
         this.setTiles();
-        Application_1.Application.ee.on('onClickTile', function (data) {
-            if (!_this.isDisabled) {
-                _this.handleClickOnTiles(data);
-            }
-        });
-        Application_1.Application.ee.on('onEndTime', function () {
-            alert('Game over!');
-            var isBegin = confirm("Назать заново?");
-            if (isBegin) {
-                _this.gp.resetGame();
-            }
-            else {
-                window.close();
-            }
-        });
-        Application_1.Application.ee.on('onWinGame', function () {
-            alert('You Win!!!');
-            var isBegin = confirm("Назать заново?");
-            if (isBegin) {
-                _this.gp.resetGame();
-            }
-            else {
-                window.close();
-            }
-        });
+        this.listenToEvents();
     };
     Board.prototype.setBg = function () {
         this.bg = PIXI.Sprite.fromImage('images/board.png');
@@ -93,6 +68,30 @@ var Board = (function (_super) {
                 _this.isDisabled = false;
             }).start();
         });
+    };
+    Board.prototype.listenToEvents = function () {
+        var _this = this;
+        Application_1.Application.ee.on('onClickTile', function (data) {
+            if (!_this.isDisabled) {
+                _this.handleClickOnTiles(data);
+            }
+        });
+        Application_1.Application.ee.on('onEndTime', function () {
+            alert('Game over!');
+            _this.resetOrCloseGame(confirm("Назать заново?"));
+        });
+        Application_1.Application.ee.on('onWinGame', function () {
+            alert('You Win!!!');
+            _this.resetOrCloseGame(confirm("Назать заново?"));
+        });
+    };
+    Board.prototype.resetOrCloseGame = function (isBegin) {
+        if (isBegin) {
+            this.gp.resetGame();
+        }
+        else {
+            window.close();
+        }
     };
     return Board;
 }(PIXI.Container));

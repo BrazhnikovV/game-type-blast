@@ -45,32 +45,14 @@ export class Board extends PIXI.Container {
         this.gp.startTime();
     }
 
+    /**
+     * init - инициализировать доску
+     * @return void
+     */
     public init(): void {
         this.setBg();
         this.setTiles();
-        Application.ee.on('onClickTile', ( data ) => {
-            if ( !this.isDisabled ) {
-                this.handleClickOnTiles( data );
-            }
-        });
-        Application.ee.on('onEndTime', () => {
-            alert('Game over!');
-            let isBegin = confirm("Назать заново?");
-            if ( isBegin ) {
-                this.gp.resetGame();
-            } else {
-                window.close();
-            }
-        });
-        Application.ee.on('onWinGame', () => {
-            alert('You Win!!!');
-            let isBegin = confirm("Назать заново?");
-            if ( isBegin ) {
-                this.gp.resetGame();
-            } else {
-                window.close();
-            }
-        });
+        this.listenToEvents();
     }
 
     /**
@@ -142,5 +124,40 @@ export class Board extends PIXI.Container {
                     this.isDisabled = false;
                 }).start();
         });
+    }
+
+    /**
+     * listenToEvents - слушать игровые и пользовательские события
+     * @return void
+     */
+    private listenToEvents(): void {
+
+        Application.ee.on('onClickTile', ( data ) => {
+            if ( !this.isDisabled ) {
+                this.handleClickOnTiles( data );
+            }
+        });
+
+        Application.ee.on('onEndTime', () => {
+            alert('Game over!');
+            this.resetOrCloseGame(confirm("Назать заново?"));
+        });
+
+        Application.ee.on('onWinGame', () => {
+            alert('You Win!!!');
+            this.resetOrCloseGame(confirm("Назать заново?"));
+        });
+    }
+
+    /**
+     * resetOrCloseGame - сбросить игру или выйти
+     * @param isBegin
+     */
+    private resetOrCloseGame( isBegin: boolean ): void {
+        if ( isBegin ) {
+            this.gp.resetGame();
+        } else {
+            window.close();
+        }
     }
 }

@@ -25,7 +25,9 @@ var LoadScene = (function (_super) {
         this.preloader = PIXI.Sprite.fromImage('images/preloader.gif');
         this.preloader.x = Config_1.Config.screenWidth / 2;
         this.preloader.y = Config_1.Config.screenHeight / 2;
-        this.preloader.anchor.set(0.5);
+        this.preloader.anchor.set(0.5, 0.5);
+        this.preloader.width = 300;
+        this.preloader.height = 300;
     };
     LoadScene.prototype.setTicker = function () {
         var _this = this;
